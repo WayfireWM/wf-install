@@ -40,9 +40,10 @@ git checkout ${STREAM}
 meson build --prefix=${PREFIX} -Duse_system_wfconfig=disabled -Duse_system_wlroots=${USE_SYSTEM_WLROOTS}
 ninja -C build
 sudo ninja -C build install
+DEST_LIBDIR=$(meson configure | grep libdir | awk '{print $2}')
 
 cd $BUILDROOT/wf-shell
-PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${PREFIX}/lib64/pkgconfig:${PREFIX}/lib/pkgconfig:${PREFIX}/lib/x86_64-linux-gnu meson build --prefix=${PREFIX}
+PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${PREFIX}/${DEST_LIBDIR}/pkgconfig meson build --prefix=${PREFIX}
 ninja -C build
 sudo ninja -C build install
 
@@ -59,17 +60,13 @@ function install_config {
     fi
 
     if [ -f ${DEFAULT_CONFIG_PATH} ]; then
-        ask_confirmation "Do you want to override the existing config file ${DEFAULT_CONFIG_PATH}?"
-        # Create a backup if overwriting
-        if [ $yn = Y ]; then
-            cp ${DEFAULT_CONFIG_PATH} ${DEFAULT_CONFIG_PATH}.back
-        fi
+        ask_confirmation "Do you want to override the existing config file ${DEFAULT_CONFIG_PATH} [y/n]? "
     else
         yn=Y
     fi
 
     if [ $yn = Y ]; then
-        cp ${CONFIG_FILE} ${DEFAULT_CONFIG_PATH}
+        cp ${CONFIG_FILE} ${DEFAULT_CONFIG_PATH} --backup=t
     fi
 }
 
@@ -79,7 +76,7 @@ install_config wf-shell.ini $BUILDROOT/wf-shell/wf-shell.ini.example
 # Generate a startup script, setting necessary env vars.
 cp $BUILDROOT/start_wayfire.sh.in $BUILDROOT/start_wayfire.sh
 if [ ${PREFIX} != '/usr' ]; then
-    sed -i "s@^LD_.*@LD_LIBRARY_PATH = \$LD_LIBRARY_PATH:${PREFIX}/lib:${PREFIX}/lib64:${PREFIX}/lib/x86_64-linux-gnu@g" $BUILDROOT/start_wayfire.sh
+    sed -i "s@^LD_.*@LD_LIBRARY_PATH = \$LD_LIBRARY_PATH:${PREFIX}/${DEST_LIBDIR}@g" $BUILDROOT/start_wayfire.sh
     sed -i "s@^PATH.*@PATH = \$PATH:${PREFIX}/bin@g" $BUILDROOT/start_wayfire.sh
 fi
 chmod 755 $BUILDROOT/start_wayfire.sh
