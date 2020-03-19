@@ -6,6 +6,7 @@ print_help() {
     echo "  -s, --stream=<stream>  Build a particular branch of Wayfire and other components. Usually master or a release like X.Y.Z"
     echo "                           Default is 0.4.0"
     echo "  -p, --prefix=<prefix>  Prefix where to install Wayfire. Default: /opt/wayfire"
+    echo "  --system-wlroots       Use the system-wide installation of wlroots instead of the bundled one."
     exit 1
 }
 
@@ -19,7 +20,7 @@ USE_SYSTEM_WLROOTS=disabled
 
 # Temporarily disable exit on error
 set +e
-options=$(getopt -o hvcs:p: --long verbose --long clean --long stream: --long prefix: -- $@)
+options=$(getopt -o hvcs:p: --long verbose --long clean --long stream: --long prefix: --long system-wlroots -- $@)
 ERROR_CODE=$?
 set -e
 
@@ -44,6 +45,9 @@ while true; do
         -p|--prefix)
             shift
             PREFIX=$1
+            ;;
+        --system-wlroots)
+            USE_SYSTEM_WLROOTS=enabled
             ;;
         -h|--help)
             print_help
