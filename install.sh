@@ -141,8 +141,8 @@ install_config wf-shell.ini $BUILDROOT/wf-shell/wf-shell.ini.example
 # Generate a startup script, setting necessary env vars.
 cp $BUILDROOT/start_wayfire.sh.in $BUILDROOT/start_wayfire.sh
 if [ ${PREFIX} != '/usr' ]; then
-    sed -i "s@^LD_.*@LD_LIBRARY_PATH = \$LD_LIBRARY_PATH:${PREFIX}/${DEST_LIBDIR}@g" $BUILDROOT/start_wayfire.sh
-    sed -i "s@^PATH.*@PATH = \$PATH:${PREFIX}/bin@g" $BUILDROOT/start_wayfire.sh
+    sed -i "s@^LD_.*@LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${PREFIX}/${DEST_LIBDIR}@g" $BUILDROOT/start_wayfire.sh
+    sed -i "s@^PATH.*@PATH=\$PATH:${PREFIX}/bin@g" $BUILDROOT/start_wayfire.sh
 fi
 chmod 755 $BUILDROOT/start_wayfire.sh
 

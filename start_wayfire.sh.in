@@ -6,7 +6,7 @@ LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 PATH=$PATH
 
 if [ -d $XDG_RUNTIME_DIR ]; then
-    LOG_FILE = $XDG_RUNTIME_DIR/wayfire.log
+    LOG_FILE=$XDG_RUNTIME_DIR/wayfire.log
     if [ -f $LOG_FILE ]; then
         cp $LOG_FILE $LOG_FILE.old
     fi
