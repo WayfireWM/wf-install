@@ -42,7 +42,7 @@ ninja -C build
 sudo ninja -C build install
 
 cd $BUILDROOT/wf-shell
-PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${PREFIX}/lib64/pkgconfig:${PREFIX}/lib/pkgconfig meson build --prefix=${PREFIX}
+PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${PREFIX}/lib64/pkgconfig:${PREFIX}/lib/pkgconfig:${PREFIX}/lib/x86_64-linux-gnu meson build --prefix=${PREFIX}
 ninja -C build
 sudo ninja -C build install
 
@@ -79,8 +79,8 @@ install_config wf-shell.ini $BUILDROOT/wf-shell/wf-shell.ini.example
 # Generate a startup script, setting necessary env vars.
 cp $BUILDROOT/start_wayfire.sh.in $BUILDROOT/start_wayfire.sh
 if [ ${PREFIX} != '/usr' ]; then
-    sed -i "s@^LD_.*@LD_LIBRARY_PATH = $LD_LIBRARY_PATH:${PREFIX}/lib:${PREFIX}/lib64@g" $BUILDROOT/start_wayfire.sh
-    sed -i "s@^PATH.*@PATH = $PATH:${PREFIX}/bin@g" $BUILDROOT/start_wayfire.sh
+    sed -i "s@^LD_.*@LD_LIBRARY_PATH = \$LD_LIBRARY_PATH:${PREFIX}/lib:${PREFIX}/lib64:${PREFIX}/lib/x86_64-linux-gnu@g" $BUILDROOT/start_wayfire.sh
+    sed -i "s@^PATH.*@PATH = \$PATH:${PREFIX}/bin@g" $BUILDROOT/start_wayfire.sh
 fi
 chmod 755 $BUILDROOT/start_wayfire.sh
 
