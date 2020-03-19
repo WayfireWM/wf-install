@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# path for wf-config and wlroots
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH
+# path is needed for wf-shell clients
+PATH=$PATH
+
+wayfire
