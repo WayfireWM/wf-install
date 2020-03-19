@@ -3,7 +3,7 @@
 set -e
 set -o xtrace
 
-BUILDROOT=$1
+BUILDROOT=$(realpath $1)
 STREAM=$2
 if [ "$STREAM" = "" ]; then
     STREAM=master
