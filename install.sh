@@ -1,24 +1,25 @@
 set -e
-set -o xtrace
+set -x
 
 BUILDROOT=$(pwd)
 
+CLEANBUILD=0
 PREFIX=/opt/wayfire
 #STREAM=0.4.0 # or master
 STREAM=master
 USE_SYSTEM_WLROOTS=disabled
 
 function ask_confirmation {
+    { set +x; } 2>/dev/null
     while true; do
-        set +e
         read -p "$1" yn
-        set -e
         case $yn in
             [Yy]* ) yn=Y; break;;
             [Nn]* ) yn=N; break;;
             * ) echo "Please answer yes or no.";;
         esac
     done
+    { set -x; } 2>/dev/null
 }
 
 if [ ${USE_SYSTEM_WLROOTS} = disabled ] & [ $PREFIX = /usr ]; then
@@ -30,9 +31,17 @@ fi
 
 # First step, clone necessary repositories
 
-#rm -rf $BUILDROOT/wayfire $BUILDROOT/wf-shell
-#git clone https://github.com/WayfireWM/wayfire
-#git clone https://github.com/WayfireWM/wf-shell
+# First argument: name of the repository to clone
+check_download() {
+    cd $BUILDROOT
+    if [ ! -d $1 ] | [ $CLEANBUILD = 1 ]; then
+        rm -rf $1
+        git clone https://github.com/WayfireWM/$1
+    fi
+}
+
+check_download wayfire
+check_download wf-shell
 
 cd $BUILDROOT/wayfire
 git checkout ${STREAM}
@@ -82,3 +91,12 @@ fi
 chmod 755 $BUILDROOT/start_wayfire.sh
 
 echo "Installation done. You can put start_wayfire.sh in your PATH and use it to start Wayfire."
+
+ask_confirmation "Do you want to install WCM, a graphical configuration tool for Wayfire [y/n]? "
+if [ $yn = Y ]; then
+    check_download wcm
+    cd $BUILDROOT/wcm
+    PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${PREFIX}/${DEST_LIBDIR}/pkgconfig meson build --prefix=${PREFIX}
+    ninja -C build
+    sudo ninja -C build install
+fi
