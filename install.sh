@@ -1,16 +1,69 @@
 set -e
-set -x
+print_help() {
+    echo "Usage:"
+    echo "  -v, --verbose          Verbose output."
+    echo "  -c, --clean            Force clean build, i.e. delete previously downloaded sources and start from scratch."
+    echo "  -s, --stream=<stream>  Build a particular branch of Wayfire and other components. Usually master or a release like X.Y.Z"
+    echo "                           Default is 0.4.0"
+    echo "  -p, --prefix=<prefix>  Prefix where to install Wayfire. Default: /opt/wayfire"
+    exit 1
+}
 
-BUILDROOT=$(pwd)
 
+# Parse arguments
+VERBOSE=0
 CLEANBUILD=0
 PREFIX=/opt/wayfire
-#STREAM=0.4.0 # or master
 STREAM=master
 USE_SYSTEM_WLROOTS=disabled
 
+# Temporarily disable exit on error
+set +e
+options=$(getopt -o hvcs:p: --long verbose --long clean --long stream: --long prefix: -- $@)
+ERROR_CODE=$?
+set -e
+
+if [ $ERROR_CODE != 0 ]; then
+    print_help
+    exit 1
+fi
+
+eval set -- $options
+while true; do
+    case $1 in
+        -v|--verbose)
+            VERBOSE=1
+            ;;
+        -c|--clean)
+            CLEANBUILD=1
+            ;;
+        -s|--stream)
+            shift
+            STREAM=$1
+            ;;
+        -p|--prefix)
+            shift
+            PREFIX=$1
+            ;;
+        -h|--help)
+            print_help
+            exit;;
+        --)
+            shift
+            break;;
+    esac
+    shift
+done
+
+if [ $VERBOSE = 1 ]; then
+    set -x
+fi
+
+echo "Building Wayfire $STREAM"
+echo "Installation prefix: $PREFIX"
+
+BUILDROOT=$(pwd)
 function ask_confirmation {
-    { set +x; } 2>/dev/null
     while true; do
         read -p "$1" yn
         case $yn in
@@ -19,7 +72,6 @@ function ask_confirmation {
             * ) echo "Please answer yes or no.";;
         esac
     done
-    { set -x; } 2>/dev/null
 }
 
 if [ ${USE_SYSTEM_WLROOTS} = disabled ] & [ $PREFIX = /usr ]; then

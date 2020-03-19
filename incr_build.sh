@@ -21,4 +21,4 @@ sudo ninja -C build install
 
 build_component wayfire
 build_component wf-shell
-#build_component wcm
+build_component wcm
