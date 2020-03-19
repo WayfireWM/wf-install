@@ -10,7 +10,11 @@ if [ "$STREAM" = "" ]; then
 fi
 
 # First argument is the name of the component
-build_component {
+build_component() {
+if [ ! -d $BUILDROOT/$1 ]; then
+    echo "Component $1 not found, skipping ..."
+    return
+fi
 cd $BUILDROOT/$1
 git fetch origin
 git checkout origin/${STREAM}
