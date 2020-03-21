@@ -78,7 +78,7 @@ function ask_confirmation {
     done
 }
 
-if [ ${USE_SYSTEM_WLROOTS} = disabled ] & [ $PREFIX = /usr ]; then
+if [ ${USE_SYSTEM_WLROOTS} = disabled ] && [ $PREFIX = /usr ]; then
     ask_confirmation 'The installation of Wayfire may overwrite any system-wide wlroots installation. Continue[y/n]? '
     if [ ${yn} = N ]; then
         exit
@@ -90,7 +90,7 @@ fi
 # First argument: name of the repository to clone
 check_download() {
     cd $BUILDROOT
-    if [ ! -d $1 ] | [ $CLEANBUILD = 1 ]; then
+    if [ ! -d $1 ] || [ $CLEANBUILD = 1 ]; then
         rm -rf $1
         git clone https://github.com/WayfireWM/$1
     fi
