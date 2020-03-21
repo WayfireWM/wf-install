@@ -94,13 +94,16 @@ check_download() {
         rm -rf $1
         git clone https://github.com/WayfireWM/$1
     fi
+
+    # Checkout the correct stream
+    cd $1
+    git checkout origin/${STREAM}
 }
 
 check_download wayfire
 check_download wf-shell
 
 cd $BUILDROOT/wayfire
-git checkout ${STREAM}
 
 meson build --prefix=${PREFIX} -Duse_system_wfconfig=disabled -Duse_system_wlroots=${USE_SYSTEM_WLROOTS}
 ninja -C build
