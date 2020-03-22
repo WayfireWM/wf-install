@@ -78,6 +78,12 @@ function ask_confirmation {
     done
 }
 
+# Usually we use sudo, but if prefix is somewhere in ~/, we don't need sudo
+SUDO=sudo
+if [ -w $PREFIX ]; then
+    SUDO=
+fi
+
 if [ ${USE_SYSTEM_WLROOTS} = disabled ] && [ $PREFIX = /usr ]; then
     ask_confirmation 'The installation of Wayfire may overwrite any system-wide wlroots installation. Continue[y/n]? '
     if [ ${yn} = N ]; then
@@ -107,13 +113,13 @@ cd $BUILDROOT/wayfire
 
 meson build --prefix=${PREFIX} -Duse_system_wfconfig=disabled -Duse_system_wlroots=${USE_SYSTEM_WLROOTS}
 ninja -C build
-sudo ninja -C build install
+$SUDO ninja -C build install
 DEST_LIBDIR=$(meson configure | grep libdir | awk '{print $2}')
 
 cd $BUILDROOT/wf-shell
 PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${PREFIX}/${DEST_LIBDIR}/pkgconfig meson build --prefix=${PREFIX}
 ninja -C build
-sudo ninja -C build install
+$SUDO ninja -C build install
 
 # Install a minimalistic, but still usable configuration
 # First argument is the name of the file
@@ -144,8 +150,8 @@ install_config wf-shell.ini $BUILDROOT/wf-shell/wf-shell.ini.example
 # Generate a startup script, setting necessary env vars.
 cp $BUILDROOT/start_wayfire.sh.in $BUILDROOT/start_wayfire.sh
 if [ ${PREFIX} != '/usr' ]; then
-    sed -i "s@^LD_.*@LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${PREFIX}/${DEST_LIBDIR}@g" $BUILDROOT/start_wayfire.sh
-    sed -i "s@^PATH.*@PATH=\$PATH:${PREFIX}/bin@g" $BUILDROOT/start_wayfire.sh
+    sed -i "s@^LD_.*@export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${PREFIX}/${DEST_LIBDIR}@g" $BUILDROOT/start_wayfire.sh
+    sed -i "s@^PATH.*@export PATH=\$PATH:${PREFIX}/bin@g" $BUILDROOT/start_wayfire.sh
 fi
 chmod 755 $BUILDROOT/start_wayfire.sh
 
@@ -157,5 +163,5 @@ if [ $yn = Y ]; then
     cd $BUILDROOT/wcm
     PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${PREFIX}/${DEST_LIBDIR}/pkgconfig meson build --prefix=${PREFIX}
     ninja -C build
-    sudo ninja -C build install
+    $SUDO ninja -C build install
 fi
