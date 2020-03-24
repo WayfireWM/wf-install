@@ -158,8 +158,9 @@ if [ ${PREFIX} != '/usr' ]; then
     sed -i "s@^PATH.*@export PATH=\$PATH:${PREFIX}/bin@g" $BUILDROOT/start_wayfire.sh
 fi
 chmod 755 $BUILDROOT/start_wayfire.sh
+$SUDO cp $BUILDROOT/start_wayfire.sh $PREFIX/bin/startwayfire
 
-echo "Installation done. You can put start_wayfire.sh in your PATH and use it to start Wayfire."
+echo "Installation done. Run $PREFIX/bin/startwayfire to start wayfire."
 
 ask_confirmation "Do you want to install WCM, a graphical configuration tool for Wayfire [y/n]? "
 if [ $yn = Y ]; then
