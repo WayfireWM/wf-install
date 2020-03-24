@@ -66,7 +66,7 @@ fi
 echo "Building Wayfire $STREAM"
 echo "Installation prefix: $PREFIX"
 
-BUILDROOT=$(pwd)
+BUILDROOT="$(cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P)"
 function ask_confirmation {
     while true; do
         read -p "$1" yn
@@ -80,7 +80,7 @@ function ask_confirmation {
 
 # Usually we use sudo, but if prefix is somewhere in ~/, we don't need sudo
 SUDO=sudo
-if [ -w $PREFIX ]; then
+if [ -w $PREFIX ] || ! which sudo > /dev/null; then
     SUDO=
 fi
 
@@ -121,6 +121,10 @@ PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${PREFIX}/${DEST_LIBDIR}/pkgconfig meson build 
 ninja -C build
 $SUDO ninja -C build install
 
+if ! pkg-config --exists libsystemd && ! pkg-config --exists libelogind && pkg-config --exists libcap; then
+    $SUDO setcap cap_sys_admin=eip "$PREFIX/bin/wayfire"
+fi
+
 # Install a minimalistic, but still usable configuration
 # First argument is the name of the file
 # Second argument is the name of the template
@@ -154,8 +158,9 @@ if [ ${PREFIX} != '/usr' ]; then
     sed -i "s@^PATH.*@export PATH=\$PATH:${PREFIX}/bin@g" $BUILDROOT/start_wayfire.sh
 fi
 chmod 755 $BUILDROOT/start_wayfire.sh
+$SUDO cp $BUILDROOT/start_wayfire.sh $PREFIX/bin/startwayfire
 
-echo "Installation done. You can put start_wayfire.sh in your PATH and use it to start Wayfire."
+echo "Installation done. Run $PREFIX/bin/startwayfire to start wayfire."
 
 ask_confirmation "Do you want to install WCM, a graphical configuration tool for Wayfire [y/n]? "
 if [ $yn = Y ]; then
