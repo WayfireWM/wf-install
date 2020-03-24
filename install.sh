@@ -66,7 +66,7 @@ fi
 echo "Building Wayfire $STREAM"
 echo "Installation prefix: $PREFIX"
 
-BUILDROOT=$(pwd)
+BUILDROOT="$(cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P)"
 function ask_confirmation {
     while true; do
         read -p "$1" yn
