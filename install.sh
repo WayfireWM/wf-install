@@ -121,6 +121,10 @@ PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${PREFIX}/${DEST_LIBDIR}/pkgconfig meson build 
 ninja -C build
 $SUDO ninja -C build install
 
+if ! pkg-config --exists libsystemd && ! pkg-config --exists libelogind && pkg-config --exists libcap; then
+    $SUDO setcap cap_sys_admin=eip "$PREFIX/bin/wayfire"
+fi
+
 # Install a minimalistic, but still usable configuration
 # First argument is the name of the file
 # Second argument is the name of the template
