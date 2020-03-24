@@ -80,7 +80,7 @@ function ask_confirmation {
 
 # Usually we use sudo, but if prefix is somewhere in ~/, we don't need sudo
 SUDO=sudo
-if [ -w $PREFIX ]; then
+if [ -w $PREFIX ] || ! which sudo > /dev/null; then
     SUDO=
 fi
 
