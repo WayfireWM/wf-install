@@ -144,6 +144,7 @@ function install_config {
     fi
 
     if [ $yn = Y ]; then
+        mkdir -p $(dirname ${DEFAULT_CONFIG_PATH})
         cp ${CONFIG_FILE} ${DEFAULT_CONFIG_PATH} --backup=t
     fi
 }
