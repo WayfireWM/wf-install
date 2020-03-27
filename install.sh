@@ -158,6 +158,12 @@ if [ ${PREFIX} != '/usr' ]; then
     sed -i "s@^LD_.*@export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${PREFIX}/${DEST_LIBDIR}@g" $BUILDROOT/start_wayfire.sh
     sed -i "s@^PATH.*@export PATH=\$PATH:${PREFIX}/bin@g" $BUILDROOT/start_wayfire.sh
 fi
+
+# Do not use hardware cursors on nouveau, these are known to not work for now.
+if [ -d '/sys/module/nouveau' ]; then
+    sed -i "s@^# WLR_NO_HARDWARE_.*@export WLR_NO_HARDWARE_CURSORS=1@g" $BUILDROOT/start_wayfire.sh
+fi
+
 chmod 755 $BUILDROOT/start_wayfire.sh
 $SUDO cp $BUILDROOT/start_wayfire.sh $PREFIX/bin/startwayfire
 

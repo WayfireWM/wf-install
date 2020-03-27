@@ -5,6 +5,8 @@ LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 # path is needed for wf-shell clients
 PATH=$PATH
 
+# WLR_NO_HARDWARE_CURSORS=1
+
 if [ -d "$XDG_RUNTIME_DIR" ]; then
     LOG_FILE=$XDG_RUNTIME_DIR/wayfire.log
     if [ -f $LOG_FILE ]; then
