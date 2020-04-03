@@ -5,14 +5,22 @@ LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 # path is needed for wf-shell clients
 PATH=$PATH
 
-if [ -d "$XDG_RUNTIME_DIR" ]; then
-    LOG_FILE=$XDG_RUNTIME_DIR/wayfire.log
+if [ -d "$XDG_DATA_HOME" ]; then
+    DEFAULT_LOG_DIR=$XDG_DATA_HOME/wayfire
+else
+    DEFAULT_LOG_DIR=$HOME/.local/share/wayfire
+fi
+
+mkdir -p $DEFAULT_LOG_DIR
+if [ $? != 0 ]; then
+    echo "Could not create log directory $DEFAULT_LOG_DIR"
+    echo "Using stdout as log"
+    wayfire
+else
+    LOG_FILE=$DEFAULT_LOG_DIR/wayfire.log
     if [ -f $LOG_FILE ]; then
         cp $LOG_FILE $LOG_FILE.old
     fi
-
     echo "Using log file: $LOG_FILE"
     wayfire &> $LOG_FILE
-else
-    wayfire
 fi
