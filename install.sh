@@ -157,6 +157,7 @@ cp $BUILDROOT/start_wayfire.sh.in $BUILDROOT/start_wayfire.sh
 if [ ${PREFIX} != '/usr' ]; then
     sed -i "s@^LD_.*@export LD_LIBRARY_PATH=${PREFIX}/${DEST_LIBDIR}:\$LD_LIBRARY_PATH@g" $BUILDROOT/start_wayfire.sh
     sed -i "s@^PATH.*@export PATH=${PREFIX}/bin:\$PATH@g" $BUILDROOT/start_wayfire.sh
+    sed -i "s@^XDG_.*@export XDG_DATA_DIRS=${PREFIX}/share:\$XDG_DATA_DIRS@g" $BUILDROOT/start_wayfire.sh
 fi
 chmod 755 $BUILDROOT/start_wayfire.sh
 $SUDO cp $BUILDROOT/start_wayfire.sh $PREFIX/bin/startwayfire
