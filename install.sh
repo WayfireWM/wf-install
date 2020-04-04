@@ -161,8 +161,6 @@ fi
 chmod 755 $BUILDROOT/start_wayfire.sh
 $SUDO cp $BUILDROOT/start_wayfire.sh $PREFIX/bin/startwayfire
 
-echo "Installation done. Run $PREFIX/bin/startwayfire to start wayfire."
-
 ask_confirmation "Do you want to install WCM, a graphical configuration tool for Wayfire [y/n]? "
 if [ $yn = Y ]; then
     check_download wcm
@@ -171,3 +169,5 @@ if [ $yn = Y ]; then
     ninja -C build
     $SUDO ninja -C build install
 fi
+
+echo "Installation done. Run $PREFIX/bin/startwayfire to start wayfire."
