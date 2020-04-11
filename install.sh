@@ -159,8 +159,7 @@ if [ ${PREFIX} != '/usr' ]; then
     sed -i "s@^PATH.*@export PATH=${PREFIX}/bin:\$PATH@g" $BUILDROOT/start_wayfire.sh
     sed -i "s@^XDG_.*@export XDG_DATA_DIRS=${PREFIX}/share:\$XDG_DATA_DIRS@g" $BUILDROOT/start_wayfire.sh
 fi
-chmod 755 $BUILDROOT/start_wayfire.sh
-$SUDO cp $BUILDROOT/start_wayfire.sh $PREFIX/bin/startwayfire
+$SUDO install -m 755 $BUILDROOT/start_wayfire.sh $PREFIX/bin/startwayfire
 
 ask_confirmation "Do you want to install WCM, a graphical configuration tool for Wayfire [y/n]? "
 if [ $yn = Y ]; then
@@ -177,7 +176,7 @@ if [ $yn = Y ]; then
     cp $BUILDROOT/wayfire.desktop.in $BUILDROOT/wayfire.desktop
     sed -i "s@^Exec.*@Exec=$PREFIX/bin/startwayfire@g" $BUILDROOT/wayfire.desktop
     sed -i "s@^Icon.*@Icon=$PREFIX/share/wayfire/icons/wayfire.png@g" $BUILDROOT/wayfire.desktop
-    $SUDO cp $BUILDROOT/wayfire.desktop $SESSIONS_DIR
+    $SUDO install -m 644 $BUILDROOT/wayfire.desktop $SESSIONS_DIR
 fi
 
 echo "Installation done. Run $PREFIX/bin/startwayfire to start wayfire."
