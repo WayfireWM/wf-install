@@ -4,6 +4,8 @@
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 # path is needed for wf-shell clients
 PATH=$PATH
+# path to find .desktop files like wcm
+XDG_DATA_DIRS=$XDG_DATA_DIRS
 
 if [ -d "$XDG_DATA_HOME" ]; then
     DEFAULT_LOG_DIR=$XDG_DATA_HOME/wayfire

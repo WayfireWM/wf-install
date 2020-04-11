@@ -1,0 +1,7 @@
+[Desktop Entry]
+Version=0.4
+Name=Wayfire Session
+Comment=Use this session to run Wayfire as your desktop environment
+Exec=$PREFIX/bin/startwayfire
+Icon=$PREFIX/share/wayfire/icons/wayfire.png
+Type=Application
