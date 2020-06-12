@@ -1,7 +1,7 @@
 # wf-install
 
 ## `install.sh`
-`install.sh` is a script to install and configure [Wayfire](wayfire.org) and related programs like [wf-shell](https://github.com/WayfireWM/wayfire).
+`install.sh` is a script to install and configure [Wayfire](https://wayfire.org) and related programs like [wf-shell](https://github.com/WayfireWM/wf-shell).
 
 The general usage is:
 
