@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# if $XDG_DATA_DIRS is not set, set it to the spec recommended value
+[ -z "$XDG_DATA_DIRS" ] && export XDG_DATA_DIRS="/usr/local/share:/usr/share"
+
 # path for wf-config and wlroots
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 # path is needed for wf-shell clients
