@@ -180,7 +180,7 @@ if [ $yn = Y ]; then
 fi
 
 SESSIONS_DIR=/usr/share/wayland-sessions
-ask_confirmation "Do you want to install wayfire.desktop to $SESSIONS_DIR/ [y/n]?"
+ask_confirmation "Do you want to install wayfire.desktop to $SESSIONS_DIR/ [y/n]? "
 if [ $yn = Y ]; then
     cp $BUILDROOT/wayfire.desktop.in $BUILDROOT/wayfire.desktop
     sed -i "s@^Exec.*@Exec=$PREFIX/bin/startwayfire@g" $BUILDROOT/wayfire.desktop
