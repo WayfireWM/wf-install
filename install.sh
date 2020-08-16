@@ -4,7 +4,7 @@ print_help() {
     echo "  -v, --verbose          Verbose output."
     echo "  -c, --clean            Force clean build, i.e. delete previously downloaded sources and start from scratch."
     echo "  -s, --stream=<stream>  Build a particular branch of Wayfire and other components. Usually master or a release like X.Y.Z"
-    echo "                           Default is 0.4.0"
+    echo "                           Default is master"
     echo "  -p, --prefix=<prefix>  Prefix where to install Wayfire. Default: /opt/wayfire"
     echo "  --system-wlroots       Use the system-wide installation of wlroots instead of the bundled one."
     exit 1
