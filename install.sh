@@ -161,6 +161,15 @@ if [ ${PREFIX} != '/usr' ]; then
 fi
 $SUDO install -m 755 $BUILDROOT/start_wayfire.sh $PREFIX/bin/startwayfire
 
+ask_confirmation "Do you want to install wayfire-plugins-extra? [y/n]? "
+if [ $yn = Y ]; then
+    check_download wayfire-plugins-extra
+    cd $BUILDROOT/wayfire-plugins-extra
+    PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${PREFIX}/${DEST_LIBDIR}/pkgconfig meson build --prefix=${PREFIX}
+    ninja -C build
+    $SUDO ninja -C build install
+fi
+
 ask_confirmation "Do you want to install WCM, a graphical configuration tool for Wayfire [y/n]? "
 if [ $yn = Y ]; then
     check_download wcm
