@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 set -e
 print_help() {
     echo "Usage:"
