@@ -9,7 +9,7 @@ The general usage is:
 git clone https://github.com/WayfireWM/wf-install
 cd wf-install
 
-./install.sh --prefix /opt/wayfire --stream 0.5.0
+./install.sh --prefix /opt/wayfire --stream 0.7.x
 ```
 
 The last script will download all necessary components and install them to the given prefix.
@@ -24,7 +24,7 @@ The script also has a few other options, which you can see by calling `./install
 It will simply update the downloaded code, recompile and install it to the same prefix as configured with `install.sh`.
 
 ```
-./update_build.sh . 0.5.0
+./update_build.sh . 0.7.x
 ```
 
 The first parameter is the toplevel directory where you started the build (i.e the folder with `wayfire`, `wf-shell` and `wcm` source), and the second one is the version of Wayfire to build.
