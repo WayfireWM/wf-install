@@ -190,7 +190,7 @@ if [ $yn = Y ]; then
     cp $BUILDROOT/wayfire.desktop.in $BUILDROOT/wayfire.desktop
     sed -i "s@^Exec.*@Exec=$PREFIX/bin/startwayfire@g" $BUILDROOT/wayfire.desktop
     sed -i "s@^Icon.*@Icon=$PREFIX/share/wayfire/icons/wayfire.png@g" $BUILDROOT/wayfire.desktop
-    sudo mkdir -p $SESSIONS_DIR
+    $SUDO_FOR_SESSIONS mkdir -p $SESSIONS_DIR
     $SUDO_FOR_SESSIONS install -m 644 $BUILDROOT/wayfire.desktop $SESSIONS_DIR
 fi
 
