@@ -180,13 +180,18 @@ if [ $yn = Y ]; then
     $SUDO ninja -C build install
 fi
 
-SESSIONS_DIR=/usr/share/wayland-sessions
+SESSIONS_DIR=/usr/share/wayland-sessions/
+SUDO_FOR_SESSIONS=sudo
+if [ -w $SESSIONS_DIR ] || ! which sudo > /dev/null; then
+  SUDO_FOR_SESSIONS=
+fi
 ask_confirmation "Do you want to install wayfire.desktop to $SESSIONS_DIR/ [y/n]? "
 if [ $yn = Y ]; then
     cp $BUILDROOT/wayfire.desktop.in $BUILDROOT/wayfire.desktop
     sed -i "s@^Exec.*@Exec=$PREFIX/bin/startwayfire@g" $BUILDROOT/wayfire.desktop
     sed -i "s@^Icon.*@Icon=$PREFIX/share/wayfire/icons/wayfire.png@g" $BUILDROOT/wayfire.desktop
-    $SUDO install -m 644 $BUILDROOT/wayfire.desktop $SESSIONS_DIR
+    $SUDO_FOR_SESSIONS mkdir -p $SESSIONS_DIR
+    $SUDO_FOR_SESSIONS install -m 644 $BUILDROOT/wayfire.desktop $SESSIONS_DIR
 fi
 
 echo "Installation done. Run $PREFIX/bin/startwayfire to start wayfire."
