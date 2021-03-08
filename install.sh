@@ -46,6 +46,9 @@ while true; do
         -p|--prefix)
             shift
             PREFIX=$1
+            if test "x$PREFIX" != "x${PREFIX#\~/}"; then
+                PREFIX="$HOME/${PREFIX#\~/}"
+            fi
             ;;
         --system-wlroots)
             USE_SYSTEM_WLROOTS=enabled
