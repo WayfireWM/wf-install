@@ -46,6 +46,7 @@ while true; do
         -p|--prefix)
             shift
             PREFIX=$1
+            eval PREFIX=$PREFIX
             ;;
         --system-wlroots)
             USE_SYSTEM_WLROOTS=enabled
