@@ -20,7 +20,7 @@ The script also has a few other options, which you can see by calling `./install
 
 ## Dependencies
 
-You will need the following dependencies installed:
+The following is a list of dependencies needed on Ubuntu, similar lists are required on other distributions.
 
 `sudo apt install git meson python3-pip pkg-config libwayland-dev autoconf libtool libffi-dev libxml2-dev libegl1-mesa-dev libgles2-mesa-dev libgbm-dev libinput-dev libxkbcommon-dev libpixman-1-dev xutils-dev xcb-proto python3-xcbgen libcairo2-dev libglm-dev libjpeg-dev libgtkmm-3.0-dev xwayland libdrm-dev libgirepository1.0-dev libsystemd-dev policykit-1 libx11-xcb-dev libxcb-xinput-dev libxcb-composite0-dev xwayland libasound2-dev libpulse-dev`
 
