@@ -21,16 +21,16 @@ USE_SYSTEM_WLROOTS=disabled
 
 # Temporarily disable exit on error
 set +e
-options=$(getopt -o hvcs:p: --long verbose --long clean --long stream: --long prefix: --long system-wlroots -- $@)
-ERROR_CODE=$?
+options="$(getopt -o hvcs:p: --long verbose --long clean --long stream: --long prefix: --long system-wlroots -- "$@")"
+ERROR_CODE="$?"
 set -e
 
-if [ $ERROR_CODE != 0 ]; then
+if [ "$ERROR_CODE" != 0 ]; then
     print_help
     exit 1
 fi
 
-eval set -- $options
+eval set -- "$options"
 while true; do
     case $1 in
         -v|--verbose)
@@ -41,11 +41,11 @@ while true; do
             ;;
         -s|--stream)
             shift
-            STREAM=$1
+            STREAM="$1"
             ;;
         -p|--prefix)
             shift
-            PREFIX=$1
+            PREFIX="$1"
             ;;
         --system-wlroots)
             USE_SYSTEM_WLROOTS=enabled
@@ -60,7 +60,7 @@ while true; do
     shift
 done
 
-if [ $VERBOSE = 1 ]; then
+if [ "$VERBOSE" = 1 ]; then
     set -x
 fi
 
@@ -71,7 +71,7 @@ BUILDROOT="$(cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P)"
 function ask_confirmation {
     while true; do
         read -p "$1" yn
-        case $yn in
+        case "$yn" in
             [Yy]* ) yn=Y; break;;
             [Nn]* ) yn=N; break;;
             * ) echo "Please answer yes or no.";;
@@ -81,13 +81,13 @@ function ask_confirmation {
 
 # Usually we use sudo, but if prefix is somewhere in ~/, we don't need sudo
 SUDO=sudo
-if [ -w $PREFIX ] || ! which sudo > /dev/null; then
+if [ -w "$PREFIX" ] || ! which sudo > /dev/null; then
     SUDO=
 fi
 
-if [ ${USE_SYSTEM_WLROOTS} = disabled ] && [ $PREFIX = /usr ]; then
+if [ "${USE_SYSTEM_WLROOTS}" = disabled ] && [ "$PREFIX" = /usr ]; then
     ask_confirmation 'The installation of Wayfire may overwrite any system-wide wlroots installation. Continue[y/n]? '
-    if [ ${yn} = N ]; then
+    if [ "${yn}" = N ]; then
         exit
     fi
 fi
@@ -96,29 +96,29 @@ fi
 
 # First argument: name of the repository to clone
 check_download() {
-    cd $BUILDROOT
-    if [ ! -d $1 ] || [ $CLEANBUILD = 1 ]; then
-        rm -rf $1
-        git clone https://github.com/WayfireWM/$1
+    cd "$BUILDROOT"
+    if [ ! -d "$1" ] || [ "$CLEANBUILD" = 1 ]; then
+        rm -rf "$1"
+        git clone "https://github.com/WayfireWM/$1"
     fi
 
     # Checkout the correct stream
-    cd $1
-    git checkout origin/${STREAM}
+    cd "$1"
+    git checkout "origin/${STREAM}"
 }
 
 check_download wayfire
 check_download wf-shell
 
-cd $BUILDROOT/wayfire
+cd "$BUILDROOT/wayfire"
 
-meson build --prefix=${PREFIX} -Duse_system_wfconfig=disabled -Duse_system_wlroots=${USE_SYSTEM_WLROOTS}
+meson build --prefix="${PREFIX}" -Duse_system_wfconfig=disabled -Duse_system_wlroots="${USE_SYSTEM_WLROOTS}"
 ninja -C build
 $SUDO ninja -C build install
-DEST_LIBDIR=$(meson configure | grep libdir | awk '{print $2}')
+DEST_LIBDIR="$(meson configure | grep libdir | awk '{print $2}')"
 
-cd $BUILDROOT/wf-shell
-PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${PREFIX}/${DEST_LIBDIR}/pkgconfig meson build --prefix=${PREFIX}
+cd "$BUILDROOT/wf-shell"
+PKG_CONFIG_PATH="$PKG_CONFIG_PATH:${PREFIX}/${DEST_LIBDIR}/pkgconfig" meson build --prefix="${PREFIX}"
 ninja -C build
 $SUDO ninja -C build install
 
@@ -130,52 +130,52 @@ fi
 # First argument is the name of the file
 # Second argument is the name of the template
 function install_config {
-    CONFIG_FILE=$BUILDROOT/$1
-    cp $2 $CONFIG_FILE
+    CONFIG_FILE="$BUILDROOT/$1"
+    cp "$2" "$CONFIG_FILE"
 
-    DEFAULT_CONFIG_PATH=${HOME}/.config/$1
+    DEFAULT_CONFIG_PATH="${HOME}/.config/$1"
     if [ "${XDG_CONFIG_HOME}" != "" ]; then
-        DEFAULT_CONFIG_PATH=${XDG_CONFIG_HOME}/$1
+        DEFAULT_CONFIG_PATH="${XDG_CONFIG_HOME}/$1"
     fi
 
-    if [ -f ${DEFAULT_CONFIG_PATH} ]; then
+    if [ -f "${DEFAULT_CONFIG_PATH}" ]; then
         ask_confirmation "Do you want to override the existing config file ${DEFAULT_CONFIG_PATH} [y/n]? "
     else
         yn=Y
     fi
 
-    if [ $yn = Y ]; then
-        mkdir -p $(dirname ${DEFAULT_CONFIG_PATH})
-        cp ${CONFIG_FILE} ${DEFAULT_CONFIG_PATH} --backup=t
+    if [ "$yn" = Y ]; then
+        mkdir -p "$(dirname "${DEFAULT_CONFIG_PATH}")"
+        cp "${CONFIG_FILE}" "${DEFAULT_CONFIG_PATH}" --backup=t
     fi
 }
 
-install_config wayfire.ini $BUILDROOT/wayfire/wayfire.ini
-install_config wf-shell.ini $BUILDROOT/wf-shell/wf-shell.ini.example
+install_config wayfire.ini "$BUILDROOT/wayfire/wayfire.ini"
+install_config wf-shell.ini "$BUILDROOT/wf-shell/wf-shell.ini.example"
 
 # Generate a startup script, setting necessary env vars.
-cp $BUILDROOT/start_wayfire.sh.in $BUILDROOT/start_wayfire.sh
-if [ ${PREFIX} != '/usr' ]; then
-    sed -i "s@^LD_.*@export LD_LIBRARY_PATH=${PREFIX}/${DEST_LIBDIR}:\$LD_LIBRARY_PATH@g" $BUILDROOT/start_wayfire.sh
-    sed -i "s@^PATH.*@export PATH=${PREFIX}/bin:\$PATH@g" $BUILDROOT/start_wayfire.sh
-    sed -i "s@^XDG_.*@export XDG_DATA_DIRS=${PREFIX}/share:\$XDG_DATA_DIRS@g" $BUILDROOT/start_wayfire.sh
+cp "$BUILDROOT/start_wayfire.sh.in" "$BUILDROOT/start_wayfire.sh"
+if [ "${PREFIX}" != '/usr' ]; then
+    sed -i "s@^LD_.*@export LD_LIBRARY_PATH=${PREFIX}/${DEST_LIBDIR}:\$LD_LIBRARY_PATH@g" "$BUILDROOT/start_wayfire.sh"
+    sed -i "s@^PATH.*@export PATH=${PREFIX}/bin:\$PATH@g" "$BUILDROOT/start_wayfire.sh"
+    sed -i "s@^XDG_.*@export XDG_DATA_DIRS=${PREFIX}/share:\$XDG_DATA_DIRS@g" "$BUILDROOT/start_wayfire.sh"
 fi
-$SUDO install -m 755 $BUILDROOT/start_wayfire.sh $PREFIX/bin/startwayfire
+$SUDO install -m 755 "$BUILDROOT/start_wayfire.sh" "$PREFIX/bin/startwayfire"
 
 ask_confirmation "Do you want to install wayfire-plugins-extra? [y/n]? "
-if [ $yn = Y ]; then
+if [ "$yn" = Y ]; then
     check_download wayfire-plugins-extra
-    cd $BUILDROOT/wayfire-plugins-extra
-    PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${PREFIX}/${DEST_LIBDIR}/pkgconfig meson build --prefix=${PREFIX}
+    cd "$BUILDROOT/wayfire-plugins-extra"
+    PKG_CONFIG_PATH="$PKG_CONFIG_PATH:${PREFIX}/${DEST_LIBDIR}/pkgconfig" meson build --prefix="${PREFIX}"
     ninja -C build
     $SUDO ninja -C build install
 fi
 
 ask_confirmation "Do you want to install WCM, a graphical configuration tool for Wayfire [y/n]? "
-if [ $yn = Y ]; then
+if [ "$yn" = Y ]; then
     check_download wcm
-    cd $BUILDROOT/wcm
-    PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${PREFIX}/${DEST_LIBDIR}/pkgconfig meson build --prefix=${PREFIX}
+    cd "$BUILDROOT/wcm"
+    PKG_CONFIG_PATH="$PKG_CONFIG_PATH:${PREFIX}/${DEST_LIBDIR}/pkgconfig" meson build --prefix="${PREFIX}"
     ninja -C build
     $SUDO ninja -C build install
 fi
@@ -186,12 +186,12 @@ if [ -w $SESSIONS_DIR ] || ! which sudo > /dev/null; then
   SUDO_FOR_SESSIONS=
 fi
 ask_confirmation "Do you want to install wayfire.desktop to $SESSIONS_DIR/ [y/n]? "
-if [ $yn = Y ]; then
-    cp $BUILDROOT/wayfire.desktop.in $BUILDROOT/wayfire.desktop
-    sed -i "s@^Exec.*@Exec=$PREFIX/bin/startwayfire@g" $BUILDROOT/wayfire.desktop
-    sed -i "s@^Icon.*@Icon=$PREFIX/share/wayfire/icons/wayfire.png@g" $BUILDROOT/wayfire.desktop
-    $SUDO_FOR_SESSIONS mkdir -p $SESSIONS_DIR
-    $SUDO_FOR_SESSIONS install -m 644 $BUILDROOT/wayfire.desktop $SESSIONS_DIR
+if [ "$yn" = Y ]; then
+    cp "$BUILDROOT/wayfire.desktop.in" "$BUILDROOT/wayfire.desktop"
+    sed -i "s@^Exec.*@Exec=$PREFIX/bin/startwayfire@g" "$BUILDROOT/wayfire.desktop"
+    sed -i "s@^Icon.*@Icon=$PREFIX/share/wayfire/icons/wayfire.png@g" "$BUILDROOT/wayfire.desktop"
+    $SUDO_FOR_SESSIONS mkdir -p "$SESSIONS_DIR"
+    $SUDO_FOR_SESSIONS install -m 644 "$BUILDROOT/wayfire.desktop" "$SESSIONS_DIR"
 fi
 
 echo "Installation done. Run $PREFIX/bin/startwayfire to start wayfire."
