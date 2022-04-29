@@ -115,7 +115,7 @@ cd "$BUILDROOT/wayfire"
 meson build --prefix="${PREFIX}" -Duse_system_wfconfig=disabled -Duse_system_wlroots="${USE_SYSTEM_WLROOTS}"
 ninja -C build
 $SUDO ninja -C build install
-DEST_LIBDIR="$(meson configure | grep libdir | awk '{print $2}')"
+DEST_LIBDIR="$(meson configure | grep "\<libdir\>" | awk '{print $2}')"
 
 cd "$BUILDROOT/wf-shell"
 PKG_CONFIG_PATH="$PKG_CONFIG_PATH:${PREFIX}/${DEST_LIBDIR}/pkgconfig" meson build --prefix="${PREFIX}"
