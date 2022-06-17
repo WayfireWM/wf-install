@@ -27,5 +27,5 @@ else
         cp $LOG_FILE $LOG_FILE.old
     fi
     echo "Using log file: $LOG_FILE"
-    wayfire &> $LOG_FILE
+    wayfire "$@" &> $LOG_FILE
 fi
