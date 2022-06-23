@@ -20,7 +20,10 @@ mkdir -p $DEFAULT_LOG_DIR
 if [ $? != 0 ]; then
     echo "Could not create log directory $DEFAULT_LOG_DIR"
     echo "Using stdout as log"
-    wayfire
+    wayfire "$@"
+elif [ ! -z "$WAYLAND_DISPLAY" ] || [ ! -z "$DISPLAY" ]; then
+    echo "Running nested, using stdout as log"
+    wayfire "$@"
 else
     LOG_FILE=$DEFAULT_LOG_DIR/wayfire.log
     if [ -f $LOG_FILE ]; then
