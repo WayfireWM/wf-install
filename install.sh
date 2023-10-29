@@ -166,7 +166,7 @@ ask_confirmation "Do you want to install wayfire-plugins-extra? [y/n]? "
 if [ "$yn" = Y ]; then
     check_download wayfire-plugins-extra
     cd "$BUILDROOT/wayfire-plugins-extra"
-    PKG_CONFIG_PATH="$PKG_CONFIG_PATH:${PREFIX}/${DEST_LIBDIR}/pkgconfig" meson build --prefix="${PREFIX}"
+    PKG_CONFIG_PATH="$PKG_CONFIG_PATH:${PREFIX}/${DEST_LIBDIR}/pkgconfig" meson setup build --prefix="${PREFIX}"
     ninja -C build
     $SUDO ninja -C build install
 fi
@@ -175,7 +175,7 @@ ask_confirmation "Do you want to install WCM, a graphical configuration tool for
 if [ "$yn" = Y ]; then
     check_download wcm
     cd "$BUILDROOT/wcm"
-    PKG_CONFIG_PATH="$PKG_CONFIG_PATH:${PREFIX}/${DEST_LIBDIR}/pkgconfig" meson build --prefix="${PREFIX}"
+    PKG_CONFIG_PATH="$PKG_CONFIG_PATH:${PREFIX}/${DEST_LIBDIR}/pkgconfig" meson setup build --prefix="${PREFIX}"
     ninja -C build
     $SUDO ninja -C build install
 fi
