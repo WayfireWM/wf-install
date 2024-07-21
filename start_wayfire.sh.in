@@ -9,6 +9,12 @@ LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 PATH=$PATH
 # path to find .desktop files like wcm
 XDG_DATA_DIRS=$XDG_DATA_DIRS
+# wayfire start command
+DBUS_RUN_SESSION=""
+# check if we have dbus capability
+if ! [[ -z "$(command -v dbus-run-session)" ]]; then
+	DBUS_RUN_SESSION="dbus-run-session"
+fi
 
 if [ -d "$XDG_DATA_HOME" ]; then
     DEFAULT_LOG_DIR=$XDG_DATA_HOME/wayfire
@@ -20,15 +26,15 @@ mkdir -p $DEFAULT_LOG_DIR
 if [ $? != 0 ]; then
     echo "Could not create log directory $DEFAULT_LOG_DIR"
     echo "Using stdout as log"
-    wayfire "$@"
+    "$DBUS_RUN_SESSION" wayfire "$@"
 elif [ ! -z "$WAYLAND_DISPLAY" ] || [ ! -z "$DISPLAY" ]; then
     echo "Running nested, using stdout as log"
-    wayfire "$@"
+    "$DBUS_RUN_SESSION" wayfire "$@"
 else
     LOG_FILE=$DEFAULT_LOG_DIR/wayfire.log
     if [ -f $LOG_FILE ]; then
         cp $LOG_FILE $LOG_FILE.old
     fi
     echo "Using log file: $LOG_FILE"
-    wayfire "$@" &> $LOG_FILE
+    "$DBUS_RUN_SESSION" wayfire "$@" &> $LOG_FILE
 fi
