@@ -9,7 +9,7 @@ Dependency List for Ubuntu. Similar lists are required on other distributions. P
 
 Dependency List for ArchLinux   
 
-`sudo pacman -Syu git meson python-pip pkgconf wayland autoconf libtool libffi libxml2 mesa libinput libxkbcommon pixman imake xorgproto xorg-server-devel xcb-proto libxcb cairo glm libjpeg-turbo gtkmm3 xorg-xwayland libdrm libgirepository systemd-libs polkit libx11 xcb-util alsa-lib libpulse seatd vala libdbusmenu-gtk3 libdisplay-info nlohmann-json glib2-devel lxinput libxcomposite hwdata`   
+`sudo pacman -Syu git meson python-pip pkgconf wayland autoconf libtool libffi libxml2 mesa libinput libxkbcommon pixman imake xorgproto xorg-server-devel xcb-proto libxcb cairo glm libjpeg-turbo gtkmm3 xorg-xwayland libdrm libgirepository systemd-libs polkit libx11 xcb-util alsa-lib libpulse seatd vala libdbusmenu-gtk3 libdisplay-info nlohmann-json glib2-devel lxinput libxcomposite xorg-util-macros hwdata`   
 
 
 ## `install.sh`
