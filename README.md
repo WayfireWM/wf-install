@@ -7,6 +7,14 @@ The following is a list of dependencies needed on Ubuntu, similar lists are requ
 
 `sudo apt install git meson python3-pip pkg-config libwayland-dev autoconf libtool libffi-dev libxml2-dev libegl1-mesa-dev libgles2-mesa-dev libgbm-dev libinput-dev libxkbcommon-dev libpixman-1-dev xutils-dev xcb-proto python3-xcbgen libcairo2-dev libglm-dev libjpeg-dev libgtkmm-3.0-dev xwayland libdrm-dev libgirepository1.0-dev libsystemd-dev policykit-1 libx11-xcb-dev libxcb-xinput-dev libxcb-composite0-dev xwayland libasound2-dev libpulse-dev libseat-dev valac libdbusmenu-gtk3-dev libxkbregistry-dev libdisplay-info-dev hwdata`
 
+Dependency list for ArchLinux
+
+`pacman -Syu autoconf pkgconf sudo which alsa-lib cairo clang cmake egl-gbm git glib2-devel glm gtk-layer-shell gtkmm3 libc++ libdbusmenu-gtk3 libdisplay-info libdrm libgirepository libglvnd libinput libpulse libxkbcommon lld meson ninja nlohmann-json pango pixman scdoc seatd vala wayland wayland-protocols xorg-server-devel xorg-utils-macros xorg-xwayland scour doxygen doctest libliftoff`
+
+These packages are part of the base-devel package (autoconf pkgconf sudo which).
+
+Suggested packages that are useful after initial install:  alacritty wlr-randr alsa-utils nano thunar xdg-desktop-portal xdg-dekstop-portal-gtk xdg-desktop-portal-wlr
+
 ## `install.sh`
 
 The general usage is:
