@@ -9,7 +9,7 @@ The following is a list of dependencies needed on Ubuntu, similar lists are requ
 
 Dependency list for ArchLinux
 
-`pacman -Syu autoconf pkgconf sudo which alsa-lib cairo clang cmake egl-gbm git glib2-devel glm gtk-layer-shell gtkmm3 libc++ libdbusmenu-gtk3 libdisplay-info libdrm libgirepository libglvnd libinput libpulse libxkbcommon lld meson ninja nlohmann-json pango pixman scdoc seatd vala wayland wayland-protocols xorg-server-devel xorg-util-macros xorg-xwayland scour doxygen doctest libliftoff`
+`pacman -Syu autoconf pkgconf sudo which alsa-lib cairo clang cmake egl-gbm git glib2-devel glm gtk-layer-shell gtkmm3 libc++ libdbusmenu-gtk3 libdisplay-info libdrm libgirepository libglvnd libinput libpulse libxkbcommon lld meson ninja yyjson pango pixman scdoc seatd vala wayland wayland-protocols xorg-server-devel xorg-util-macros xorg-xwayland scour doctest`
 
 These packages are part of the base-devel package (autoconf pkgconf sudo which).
 
