@@ -88,8 +88,14 @@ function ask_confirmation {
     done
 }
 
+# Check if we have doas, if we do, use it instead of sudo.
+if [[ -n "$(command -v doas)" ]]; then
+	SUDO=doas
+else
+	SUDO=sudo
+fi
+
 # Usually we use sudo, but if prefix is somewhere in ~/, we don't need sudo
-SUDO=sudo
 if [ -w "$PREFIX" ] || ! which sudo > /dev/null; then
     SUDO=
 fi
